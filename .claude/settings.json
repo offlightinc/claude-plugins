@@ -3,6 +3,7 @@
     "dual@team-offlight": true,
     "spawn@team-offlight": true,
     "ulp@team-offlight": true,
-    "session-commit@team-offlight": true
+    "session-commit@team-offlight": true,
+    "conclave@team-offlight": true
   }
 }
