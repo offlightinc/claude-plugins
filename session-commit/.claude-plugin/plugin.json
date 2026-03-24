@@ -1,0 +1,12 @@
+{
+  "name": "session-commit",
+  "version": "1.0.0",
+  "description": "Commit only files changed in the current session — no git diff/status needed",
+  "author": {
+    "name": "Team Offlight",
+    "url": "https://github.com/offlightinc"
+  },
+  "repository": "https://github.com/offlightinc/claude-plugins",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugin", "git", "commit", "session"]
+}
