@@ -48,9 +48,18 @@ touch /tmp/manage-skill-active
 `claude plugin uninstall`이 installed_plugins.json + settings.json + 캐시를 **자동 정리**한다.
 수동으로 JSON 편집하거나 캐시 디렉토리를 삭제하지 않는다.
 
+**scope에 따라 플래그가 다르다:**
+- user scope (글로벌): `claude plugin uninstall <name>@<marketplace>`
+- project scope: `claude plugin uninstall <name>@<marketplace> --scope project`
+
+project scope에서 enabled된 플러그인은 `--scope project` 없이 uninstall 불가.
+에러 "enabled at project scope"가 나오면 `--scope project`를 붙인다.
+
 ```bash
 # 1. 제거 (캐시 + settings 자동 정리)
 claude plugin uninstall <old-name>@team-offlight
+# project scope인 경우:
+claude plugin uninstall <old-name>@team-offlight --scope project
 
 # 2. 소스 삭제
 rm -rf ~/claude-plugins/plugins/<old-name>/
