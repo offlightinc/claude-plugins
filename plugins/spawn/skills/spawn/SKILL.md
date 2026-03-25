@@ -32,6 +32,7 @@ The spawned session is always **interactive** — the user will continue the con
 | "코드 리뷰 세션 띄워줘" | `claude --agent code-reviewer` |
 | "그냥 새 세션 하나 열어줘" | `claude` |
 | "이 작업 새 세션에서 해줘" | `claude $'작업 맥락과 지시사항'` |
+| "Ralph 모드로 띄워줘" / "dangerous mode" / "퍼미션 스킵" | `claude --dangerously-skip-permissions` |
 
 ## Context Passing
 
@@ -57,6 +58,8 @@ If the intent is ambiguous, ask the user to clarify using AskUserQuestion.
 Multiple flags can be combined:
 ```bash
 CLAUDE_CODE_TASK_LIST_ID=my-tasks claude --agent debugger
+claude --dangerously-skip-permissions $'작업 맥락'
+CLAUDE_CODE_TASK_LIST_ID=X claude --dangerously-skip-permissions
 ```
 
 ## Execution
