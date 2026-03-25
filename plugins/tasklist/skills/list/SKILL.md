@@ -40,4 +40,15 @@ for i, name in enumerate(dirs, 1):
 "
 ```
 
-결과를 그대로 표시하고 끝. 로드하려면 `/tasklist:load <이름>`을 안내한다.
+## 출력
+
+결과를 마크다운 테이블로 정리해서 표시한다:
+
+| # | Task List | 진행률 | 상태 |
+|---|-----------|--------|------|
+| 1 | example-list | 3/10 | 2 in progress, 5 pending |
+| 2 | empty-list | 0/0 | 빈 리스트 |
+
+- `0/0`인 항목은 상태를 "빈 리스트"로 표시
+- in_progress가 있으면 먼저, 그 다음 pending 수 표시
+- 마지막에 `/tasklist:load <이름>`을 안내
