@@ -1,22 +1,24 @@
 ---
-name: load-tasklist
+name: load
 description: |
-  Browse saved Task Lists and load one into a new Claude Code session.
-  Trigger: "/load-tasklist", "태스크 리스트 불러와", "태스크 리스트 로드",
-  "task list 열어줘", "어떤 태스크 리스트 있어?"
+  저장된 Task List를 선택하여 새 Claude Code 세션에 로드합니다.
+  Trigger: "/tasklist:load", "태스크 리스트 불러와", "태스크 리스트 로드",
+  "task list 열어줘", "태스크 리스트 로드해줘"
 allowed-tools:
   - Bash
   - AskUserQuestion
 user-invocable: true
 ---
 
-# Load Task List
+# Task List — 로드
 
-`~/.claude/tasks/`에 저장된 Task List를 조회하고, 선택한 리스트로 새 세션을 spawn합니다.
+저장된 Task List를 선택하여 새 Warp 세션에 spawn합니다.
 
-## Step 1: 목록 조회 + 선택
+## 인자 지원
 
-**단일 Bash 호출**로 이름 있는 디렉토리만 필터링하고 진행률을 한번에 출력합니다:
+`$ARGUMENTS`가 있으면 목록 조회를 건너뛰고 바로 Spawn으로 진행한다.
+
+## Step 1: 목록 조회 + 선택 (인자 없을 때만)
 
 ```bash
 python3 -c "
@@ -43,17 +45,14 @@ for i, name in enumerate(dirs, 1):
 "
 ```
 
-출력 결과를 그대로 보여준 뒤, AskUserQuestion으로 **번호 또는 이름**을 입력받습니다.
-
-AskUserQuestion 옵션:
-- 상위 2~3개 리스트를 옵션으로 제공 (진행중 > pending 순 우선)
-- 나머지는 사용자가 "Other"로 번호/이름 직접 입력
+출력 후 AskUserQuestion으로 선택받는다:
+- 상위 2~3개를 옵션으로 제공 (in_progress > pending 순)
+- 나머지는 "Other"로 번호/이름 직접 입력
 
 ## Step 2: Spawn
 
-선택 즉시 spawn합니다. 상세 태스크 목록은 표시하지 않음 (새 세션에서 Ctrl+T로 확인).
+선택 즉시 spawn. 상세 태스크 목록은 표시하지 않음 (새 세션에서 Ctrl+T로 확인).
 
-AppleScript 실행:
 ```bash
 osascript -e '
 set the clipboard to "CLAUDE_CODE_TASK_LIST_ID=<selected-id> claude"
@@ -82,8 +81,3 @@ end tell
 ```
 Done — '<name>' 로드됨. Warp 새 탭에서 Ctrl+T로 확인하세요.
 ```
-
-## 인자 지원
-
-`/load-tasklist <id>` 형태로 직접 지정하면 Step 1을 건너뛰고 바로 Step 2로 진행합니다.
-`$ARGUMENTS`가 있으면 해당 ID를 바로 사용.

@@ -37,9 +37,9 @@
       "source": "./plugins/create-extension"
     },
     {
-      "name": "load-tasklist",
-      "description": "Browse saved Task Lists and load one into a new Claude Code session",
-      "source": "./plugins/load-tasklist"
+      "name": "tasklist",
+      "description": "Browse and load saved Claude Code Task Lists",
+      "source": "./plugins/tasklist"
     }
   ]
 }
