@@ -6,7 +6,6 @@ description: |
   "task list 열어줘", "어떤 태스크 리스트 있어?"
 allowed-tools:
   - Bash
-  - Read
   - AskUserQuestion
 user-invocable: true
 ---
@@ -15,75 +14,44 @@ user-invocable: true
 
 `~/.claude/tasks/`에 저장된 Task List를 조회하고, 선택한 리스트로 새 세션을 spawn합니다.
 
-## Step 1: 목록 조회
+## Step 1: 목록 조회 + 선택
+
+**단일 Bash 호출**로 이름 있는 디렉토리만 필터링하고 진행률을 한번에 출력합니다:
 
 ```bash
-ls ~/.claude/tasks/
-```
-
-각 디렉토리의 태스크 수와 진행률을 요약합니다:
-
-```bash
-# 각 디렉토리마다 실행
 python3 -c "
-import json, os, glob, sys
-d = sys.argv[1]
-files = glob.glob(os.path.join(d, '*.json'))
-total = len(files)
-done = sum(1 for f in files if json.load(open(f)).get('status') == 'completed')
-pending = sum(1 for f in files if json.load(open(f)).get('status') == 'pending')
-progress = sum(1 for f in files if json.load(open(f)).get('status') == 'in_progress')
-name = os.path.basename(d)
-print(f'{name}  ({done}/{total} done, {progress} in progress, {pending} pending)')
-" ~/.claude/tasks/<DIR>
+import json, os, glob, re
+base = os.path.expanduser('~/.claude/tasks')
+dirs = sorted([d for d in os.listdir(base)
+               if os.path.isdir(os.path.join(base, d))
+               and not re.match(r'^[0-9a-f]{8}-', d)])
+for i, name in enumerate(dirs, 1):
+    path = os.path.join(base, name)
+    files = glob.glob(os.path.join(path, '*.json'))
+    total = len(files)
+    if total == 0:
+        continue
+    done = 0; prog = 0; pend = 0
+    for f in files:
+        try:
+            s = json.load(open(f)).get('status','')
+            if s == 'completed': done += 1
+            elif s == 'in_progress': prog += 1
+            elif s == 'pending': pend += 1
+        except: pass
+    print(f'  {i:2d}) {name:<35s} {done}/{total} done, {prog} in progress, {pend} pending')
+"
 ```
 
-결과를 번호 매긴 선택지로 표시합니다:
+출력 결과를 그대로 보여준 뒤, AskUserQuestion으로 **번호 또는 이름**을 입력받습니다.
 
-```
-저장된 Task Lists:
+AskUserQuestion 옵션:
+- 상위 2~3개 리스트를 옵션으로 제공 (진행중 > pending 순 우선)
+- 나머지는 사용자가 "Other"로 번호/이름 직접 입력
 
-  1) claude-code-mastery    (6/68 done, 0 in progress, 62 pending)
-  2) ai-autonomous-testing  (3/8 done, 1 in progress, 4 pending)
-  3) comment-yjs            (5/7 done, 0 in progress, 2 pending)
-  ...
+## Step 2: Spawn
 
-어떤 리스트를 로드할까요? (번호 또는 이름)
-```
-
-AskUserQuestion으로 선택을 받습니다.
-
-## Step 2: 선택된 리스트 상세 표시
-
-선택된 리스트의 전체 태스크를 테이블로 표시합니다:
-
-```
-📋 claude-code-mastery (6/68)
-
-  #  Status       Subject
-  1  ✅ completed  01. Overview — Claude Code 개요
-  2  ✅ completed  02. Quickstart — 퀵스타트
-  ...
-  7  ⬜ pending    07. Skills — 커스텀 명령어/스킬
-  8  ⬜ pending    08. Sub-agents — 서브에이전트
-```
-
-## Step 3: 액션 선택
-
-AskUserQuestion으로 다음 중 선택:
-
-- **새 세션에서 열기** (기본) → Step 4로
-- **여기서 보기만** → 특정 태스크 상세 보기 (Read로 JSON 표시)
-- **취소**
-
-## Step 4: 새 세션 Spawn
-
-`/spawn` 스킬의 Execution 패턴을 그대로 사용합니다.
-
-명령어:
-```bash
-CLAUDE_CODE_TASK_LIST_ID=<selected-id> claude
-```
+선택 즉시 spawn합니다. 상세 태스크 목록은 표시하지 않음 (새 세션에서 Ctrl+T로 확인).
 
 AppleScript 실행:
 ```bash
@@ -109,14 +77,13 @@ end tell
 - Set clipboard BEFORE opening tab
 - `keystroke return` at end is REQUIRED
 
-## Step 5: 완료 보고
+## Step 3: 완료 보고
 
 ```
-✅ 새 세션에서 'claude-code-mastery' 태스크 리스트를 로드했습니다.
-   Warp 새 탭에서 확인하세요. Ctrl+T로 태스크 목록을 볼 수 있습니다.
+Done — '<name>' 로드됨. Warp 새 탭에서 Ctrl+T로 확인하세요.
 ```
 
 ## 인자 지원
 
-`/load-tasklist <id>` 형태로 직접 지정하면 Step 1을 건너뛰고 Step 2부터 시작합니다.
+`/load-tasklist <id>` 형태로 직접 지정하면 Step 1을 건너뛰고 바로 Step 2로 진행합니다.
 `$ARGUMENTS`가 있으면 해당 ID를 바로 사용.
