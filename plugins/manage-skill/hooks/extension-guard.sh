@@ -27,7 +27,7 @@ case "$file_path" in
     ;;
 esac
 
-echo "⛔ 확장 파일 수정이 차단되었습니다: $(basename "$file_path")"
-echo "먼저 /manage-skill 스킬을 호출하세요."
-echo "manage-skill이 검증 + 배포 파이프라인을 포함합니다."
+echo "⛔ 확장 파일 수정이 차단되었습니다: $(basename "$file_path")" >&2
+echo "먼저 /manage-skill 스킬을 호출하세요." >&2
+echo "manage-skill이 검증 + 배포 파이프라인을 포함합니다." >&2
 exit 2
