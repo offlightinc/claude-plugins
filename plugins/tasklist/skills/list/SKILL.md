@@ -28,8 +28,6 @@ for i, name in enumerate(dirs, 1):
     path = os.path.join(base, name)
     files = glob.glob(os.path.join(path, '*.json'))
     total = len(files)
-    if total == 0:
-        continue
     done = 0; prog = 0; pend = 0
     for f in files:
         try:
