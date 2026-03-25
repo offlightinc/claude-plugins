@@ -128,6 +128,48 @@ tools:
 - claude-code-kit 훅인 경우 hookInstaller.ts에 등록되었는지 확인
 - MCP 의존이 있는데 마켓플레이스에 넣으려 한 건 아닌지 재확인
 
+## Step 5: 배포 & 활성화
+
+**파일 생성 ≠ 배포 완료.** 배치 유형별로 활성화 단계가 다르다.
+
+### 마켓플레이스 (team-offlight)
+
+5단계 파이프라인을 **전부 실행**해야 사용 가능:
+
+```bash
+# 1. 커밋
+cd ~/claude-plugins
+git add plugins/<name>/ .claude-plugin/marketplace.json
+git commit -m "feat: <name> 플러그인 추가"
+
+# 2. Push
+git push
+
+# 3. 로컬 마켓플레이스 캐시 갱신 (이걸 빠뜨리면 install 시 "not found")
+cd ~/.claude/plugins/marketplaces/team-offlight
+git pull
+
+# 4. 플러그인 설치
+claude plugin install <name>@team-offlight
+
+# 5. 현재 세션에 반영
+# → 사용자에게 /reload-plugins 실행을 안내
+```
+
+**흔한 실패 원인:**
+- push 후 바로 install → 캐시 stale → **"Plugin not found"** → Step 3 누락
+- install 후 스킬이 안 보임 → `/reload-plugins` 안 했음 → Step 5 누락
+
+### 프로젝트 .claude/
+
+- 파일 생성 즉시 사용 가능 (다음 세션 또는 `/reload-plugins`)
+- git commit은 팀 공유 목적으로 별도 수행
+
+### claude-code-kit
+
+- 앱 빌드(`pnpm --filter=@conclave/desktop build:mac`) 후 hookInstaller가 자동 설치
+- 개발 중에는 수동으로 `~/.claude/`에 복사하여 테스트 가능
+
 ## 금지 사항
 
 - MCP 의존(`mcp__conclave-dev__*`) 있는 확장을 마켓플레이스에 넣지 않는다
