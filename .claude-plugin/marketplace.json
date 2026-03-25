@@ -35,6 +35,11 @@
       "name": "create-extension",
       "description": "Guide for creating Claude Code extensions (skills, hooks, agents) in the right location",
       "source": "./plugins/create-extension"
+    },
+    {
+      "name": "load-tasklist",
+      "description": "Browse saved Task Lists and load one into a new Claude Code session",
+      "source": "./plugins/load-tasklist"
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "load-tasklist",
+  "version": "1.0.0",
+  "description": "Browse and load saved Task Lists into a new Claude Code session",
+  "author": { "name": "Team Offlight", "url": "https://github.com/offlightinc" },
+  "repository": "https://github.com/offlightinc/claude-plugins",
+  "license": "MIT"
+}
