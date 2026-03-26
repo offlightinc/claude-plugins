@@ -4,9 +4,9 @@
   "description": "Manage Claude Code extensions (skills, hooks, agents) — create, modify, rename, delete with deployment pipeline",
   "author": {
     "name": "Team Offlight",
-    "url": "https://github.com/offlightinc"
+    "url": "https://github.com/namho-hong"
   },
-  "repository": "https://github.com/offlightinc/claude-plugins",
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
   "license": "MIT",
   "hooks": {
     "PreToolUse": [

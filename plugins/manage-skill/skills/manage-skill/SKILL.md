@@ -151,8 +151,8 @@ tools:
      "name": "<name>",
      "version": "0.0.1",
      "description": "<설명>",
-     "author": { "name": "Team Offlight", "url": "https://github.com/offlightinc" },
-     "repository": "https://github.com/offlightinc/claude-plugins",
+     "author": { "name": "Team Offlight", "url": "https://github.com/namho-hong" },
+     "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
      "license": "MIT"
    }
    ```

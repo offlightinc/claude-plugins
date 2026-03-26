@@ -4,9 +4,9 @@
   "description": "Ultimate Loop Planning - 6-stage critique-based loop for thorough plan generation",
   "author": {
     "name": "Team Offlight",
-    "url": "https://github.com/offlightinc"
+    "url": "https://github.com/namho-hong"
   },
-  "repository": "https://github.com/offlightinc/claude-plugins",
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
   "license": "MIT",
   "keywords": ["claude-code", "plugin", "planning", "critique-loop", "architecture"]
 }

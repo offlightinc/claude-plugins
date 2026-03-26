@@ -4,8 +4,8 @@
   "description": "My Knowledge Base for Claude Code — compound your knowledge across sessions. Tracks what you know, what you're unsure about, and what you don't know, with verified assessments and timeline history.",
   "author": {
     "name": "Team Offlight",
-    "url": "https://github.com/offlightinc"
+    "url": "https://github.com/namho-hong"
   },
-  "repository": "https://github.com/offlightinc/claude-plugins",
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
   "license": "MIT"
 }
