@@ -1,0 +1,12 @@
+{
+  "name": "docs-diff",
+  "version": "0.1.0",
+  "description": "Track documentation changes for AI coding tools (Claude Code, OpenAI Codex, Gemini CLI) with self-healing crawlers and detailed change reports",
+  "author": {
+    "name": "Team Offlight",
+    "url": "https://github.com/namho-hong"
+  },
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugin", "docs", "diff", "tracker", "crawler", "codex", "gemini"]
+}

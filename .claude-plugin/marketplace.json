@@ -40,6 +40,11 @@
       "name": "tasklist",
       "description": "Browse and load saved Claude Code Task Lists",
       "source": "./plugins/tasklist"
+    },
+    {
+      "name": "docs-diff",
+      "description": "Track AI coding tool docs changes (Claude Code, Codex, Gemini CLI) — self-healing crawlers with detailed change reports",
+      "source": "./plugins/docs-diff"
     }
   ]
 }
