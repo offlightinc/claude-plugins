@@ -11,6 +11,9 @@ fi
 HOOK_INPUT=$(cat)
 TRANSCRIPT_PATH=$(echo "$HOOK_INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
 
+# Stop 훅은 Claude Code가 transcript 쓰기 전에 실행될 수 있어서 딜레이 필요
+sleep 0.5
+
 # transcript에서 마지막 assistant 메시지 추출
 BODY="Response complete"
 if [[ -n "$TRANSCRIPT_PATH" && -f "$TRANSCRIPT_PATH" ]]; then
