@@ -1,0 +1,8 @@
+{
+  "name": "session-id-injector",
+  "version": "0.0.1",
+  "description": "Injects CLAUDE_CODE_SESSION_ID environment variable on SessionStart for session isolation in plugins like ralph-loop",
+  "author": { "name": "Team Offlight", "url": "https://github.com/namho-hong" },
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
+  "license": "MIT"
+}

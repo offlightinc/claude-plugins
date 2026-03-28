@@ -1,0 +1,15 @@
+{
+  "description": "Injects CLAUDE_CODE_SESSION_ID on session start",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/inject-session-id.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
