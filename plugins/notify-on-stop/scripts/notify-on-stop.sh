@@ -1,5 +1,5 @@
 #!/bin/bash
-# Show a macOS notification when Claude stops responding
+# Play a sound and show a macOS notification when Claude stops responding
 # Conclave 터미널에서는 스킵 (별도 훅이 처리)
 
 if [[ -n "${CONCLAVE_TERMINAL:-}" ]]; then
@@ -19,7 +19,8 @@ if [[ -n "$TRANSCRIPT_PATH" && -f "$TRANSCRIPT_PATH" ]]; then
   fi
 fi
 
-# macOS 네이티브 알림
+# 사운드 재생 + macOS 네이티브 알림
+afplay /System/Library/Sounds/Glass.aiff &
 osascript -e "display notification \"$BODY\" with title \"Claude Code\"" &
 
 exit 0

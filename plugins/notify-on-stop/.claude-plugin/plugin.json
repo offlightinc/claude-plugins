@@ -1,7 +1,7 @@
 {
   "name": "notify-on-stop",
-  "version": "0.0.1",
-  "description": "Show a macOS notification when Claude stops responding",
+  "version": "0.0.2",
+  "description": "Play a sound and show a macOS notification when Claude stops responding",
   "author": {
     "name": "Team Offlight",
     "url": "https://github.com/namho-hong"

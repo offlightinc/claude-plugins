@@ -42,13 +42,8 @@
       "source": "./plugins/tasklist"
     },
     {
-      "name": "sound-on-stop",
-      "description": "Play a system sound when Claude stops responding",
-      "source": "./plugins/sound-on-stop"
-    },
-    {
       "name": "notify-on-stop",
-      "description": "Show a macOS notification when Claude stops responding",
+      "description": "Play a sound and show a macOS notification when Claude stops responding",
       "source": "./plugins/notify-on-stop"
     }
   ]
