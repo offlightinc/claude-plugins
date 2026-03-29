@@ -50,6 +50,11 @@
       "name": "session-id-injector",
       "description": "Injects CLAUDE_CODE_SESSION_ID env var on SessionStart for plugin session isolation",
       "source": "./plugins/session-id-injector"
+    },
+    {
+      "name": "ralph-plan",
+      "description": "Ralph Loop brief generator — interview-driven task planning with machine-verifiable done criteria",
+      "source": "./plugins/ralph-plan"
     }
   ]
 }

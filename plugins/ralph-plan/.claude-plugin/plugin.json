@@ -1,0 +1,12 @@
+{
+  "name": "ralph-plan",
+  "version": "0.0.1",
+  "description": "Ralph Loop brief generator — interview-driven task planning with machine-verifiable done criteria",
+  "author": {
+    "name": "Team Offlight",
+    "url": "https://github.com/namho-hong"
+  },
+  "repository": "https://github.com/namho-hong/team-offlight-claude-code-plugins",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugin", "ralph-loop", "planning", "brief", "dod"]
+}
