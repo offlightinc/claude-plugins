@@ -149,7 +149,7 @@ FOCUS_SCRIPT=$(build_focus_script "$TARGET_TTY" "$TARGET_CWD")
 # disown으로 분리하지 않으면 hook이 영원히 안 끝남
 
 # osascript 알림 (한국어 인코딩을 위해 heredoc 사용)
-osascript <<NOTIFICATION </dev/null >/dev/null 2>&1 &
+osascript >/dev/null 2>&1 <<NOTIFICATION &
 display notification "$BODY" with title "Claude Code"
 NOTIFICATION
 disown
