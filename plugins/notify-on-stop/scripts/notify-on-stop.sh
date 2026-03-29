@@ -144,13 +144,17 @@ APPLESCRIPT
 FOCUS_SCRIPT=$(build_focus_script "$TARGET_TTY" "$TARGET_CWD")
 
 # --- 알림 전송 ---
-# osascript 알림은 항상 보냄 (안정적)
-# heredoc으로 전달해야 한국어 인코딩이 깨지지 않음
-osascript <<NOTIFICATION &
+# 모든 자식 프로세스를 프로세스 그룹에서 분리해야 함
+# Claude Code는 프로세스 그룹 전체 종료를 기다리므로,
+# disown으로 분리하지 않으면 hook이 영원히 안 끝남
+
+# osascript 알림 (한국어 인코딩을 위해 heredoc 사용)
+osascript <<NOTIFICATION </dev/null >/dev/null 2>&1 &
 display notification "$BODY" with title "Claude Code"
 NOTIFICATION
+disown
 
-# terminal-notifier는 추가로 보냄 (클릭 시 탭 포커스 기능)
+# terminal-notifier (클릭 시 탭 포커스 기능)
 if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
   FOCUS_SCRIPT_FILE=$(mktemp /tmp/notify-focus-XXXXXX)
   echo '#!/bin/bash' > "$FOCUS_SCRIPT_FILE"
@@ -163,10 +167,12 @@ if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
     -message "$BODY" \
     -title "Claude Code" \
     -sender "$BUNDLE_ID" \
-    -execute "$FOCUS_SCRIPT_FILE" &
+    -execute "$FOCUS_SCRIPT_FILE" </dev/null >/dev/null 2>&1 &
+  disown
 fi
 
 # 사운드 재생
-afplay /System/Library/Sounds/Glass.aiff &
+afplay /System/Library/Sounds/Glass.aiff </dev/null >/dev/null 2>&1 &
+disown
 
 exit 0
