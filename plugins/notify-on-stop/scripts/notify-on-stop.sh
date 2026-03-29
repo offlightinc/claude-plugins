@@ -148,13 +148,8 @@ FOCUS_SCRIPT=$(build_focus_script "$TARGET_TTY" "$TARGET_CWD")
 # Claude Code는 프로세스 그룹 전체 종료를 기다리므로,
 # disown으로 분리하지 않으면 hook이 영원히 안 끝남
 
-# osascript 알림 (한국어 인코딩을 위해 heredoc 사용)
-osascript >/dev/null 2>&1 <<NOTIFICATION &
-display notification "$BODY" with title "Claude Code"
-NOTIFICATION
-disown
-
-# terminal-notifier (클릭 시 탭 포커스 기능)
+# terminal-notifier가 있으면 그것만 사용 (클릭 시 탭 포커스 지원)
+# 없으면 osascript fallback (클릭 핸들러 없음)
 if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
   FOCUS_SCRIPT_FILE=$(mktemp /tmp/notify-focus-XXXXXX)
   echo '#!/bin/bash' > "$FOCUS_SCRIPT_FILE"
@@ -168,6 +163,11 @@ if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
     -title "Claude Code" \
     -sender "$BUNDLE_ID" \
     -execute "bash $FOCUS_SCRIPT_FILE" </dev/null >/dev/null 2>&1 &
+  disown
+else
+  osascript >/dev/null 2>&1 <<NOTIFICATION &
+display notification "$BODY" with title "Claude Code"
+NOTIFICATION
   disown
 fi
 
