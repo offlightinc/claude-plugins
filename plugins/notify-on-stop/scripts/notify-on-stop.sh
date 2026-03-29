@@ -144,27 +144,34 @@ APPLESCRIPT
 FOCUS_SCRIPT=$(build_focus_script "$TARGET_TTY" "$TARGET_CWD")
 
 # --- 알림 전송 ---
-# 모든 자식 프로세스를 프로세스 그룹에서 분리해야 함
-# Claude Code는 프로세스 그룹 전체 종료를 기다리므로,
-# disown으로 분리하지 않으면 hook이 영원히 안 끝남
+# alerter: --group으로 이전 알림 대체 (누적 방지), --timeout으로 자동 해제
+# 클릭 시 stdout에 @CONTENTCLICKED 출력 → 포커스 스크립트 실행
+if command -v alerter &>/dev/null; then
+  FOCUS_SCRIPT_FILE=""
+  if [[ -n "$FOCUS_SCRIPT" ]]; then
+    FOCUS_SCRIPT_FILE=$(mktemp /tmp/notify-focus-XXXXXX)
+    echo '#!/bin/bash' > "$FOCUS_SCRIPT_FILE"
+    echo "osascript <<'EOFSCRIPT'" >> "$FOCUS_SCRIPT_FILE"
+    echo "$FOCUS_SCRIPT" >> "$FOCUS_SCRIPT_FILE"
+    echo "EOFSCRIPT" >> "$FOCUS_SCRIPT_FILE"
+    chmod +x "$FOCUS_SCRIPT_FILE"
+  fi
 
-# terminal-notifier가 있으면 그것만 사용 (클릭 시 탭 포커스 지원)
-# 없으면 osascript fallback (클릭 핸들러 없음)
-if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
-  FOCUS_SCRIPT_FILE=$(mktemp /tmp/notify-focus-XXXXXX)
-  echo '#!/bin/bash' > "$FOCUS_SCRIPT_FILE"
-  echo "osascript <<'EOFSCRIPT'" >> "$FOCUS_SCRIPT_FILE"
-  echo "$FOCUS_SCRIPT" >> "$FOCUS_SCRIPT_FILE"
-  echo "EOFSCRIPT" >> "$FOCUS_SCRIPT_FILE"
-  chmod +x "$FOCUS_SCRIPT_FILE"
-
-  terminal-notifier \
-    -message "$BODY" \
-    -title "Claude Code" \
-    -sender "$BUNDLE_ID" \
-    -execute "bash $FOCUS_SCRIPT_FILE" </dev/null >/dev/null 2>&1 &
+  (
+    RESULT=$(alerter \
+      --message "$BODY" \
+      --title "Claude Code" \
+      --sender "$BUNDLE_ID" \
+      --group "claude-stop" \
+      --timeout 15 2>/dev/null)
+    if [[ "$RESULT" == "@CONTENTCLICKED" && -n "$FOCUS_SCRIPT_FILE" ]]; then
+      bash "$FOCUS_SCRIPT_FILE" 2>/dev/null
+      rm -f "$FOCUS_SCRIPT_FILE"
+    fi
+  ) </dev/null >/dev/null 2>&1 &
   disown
 else
+  # fallback: osascript (클릭 핸들러 없음)
   osascript >/dev/null 2>&1 <<NOTIFICATION &
 display notification "$BODY" with title "Claude Code"
 NOTIFICATION
