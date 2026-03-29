@@ -1,6 +1,6 @@
 {
   "name": "ralph-plan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Ralph Loop brief generator — interview-driven task planning with machine-verifiable done criteria",
   "author": {
     "name": "Team Offlight",
