@@ -142,9 +142,11 @@ APPLESCRIPT
 FOCUS_SCRIPT=$(build_focus_script "$TARGET_TTY" "$TARGET_CWD")
 
 # --- 알림 전송 ---
+# osascript 알림은 항상 보냄 (안정적)
+osascript -e "display notification \"$BODY\" with title \"Claude Code\"" &
+
+# terminal-notifier는 추가로 보냄 (클릭 시 탭 포커스 기능)
 if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
-  # terminal-notifier: 알림 클릭 시 탭 포커스
-  # -execute에 전달할 스크립트를 임시 파일로 저장 (복잡한 AppleScript를 인라인으로 넣기 어려움)
   FOCUS_SCRIPT_FILE=$(mktemp /tmp/notify-focus-XXXXXX)
   echo '#!/bin/bash' > "$FOCUS_SCRIPT_FILE"
   echo "osascript <<'EOFSCRIPT'" >> "$FOCUS_SCRIPT_FILE"
@@ -157,16 +159,6 @@ if command -v terminal-notifier &>/dev/null && [[ -n "$FOCUS_SCRIPT" ]]; then
     -title "Claude Code" \
     -sender "$BUNDLE_ID" \
     -execute "$FOCUS_SCRIPT_FILE" &
-elif command -v terminal-notifier &>/dev/null; then
-  # terminal-notifier 있지만 포커스 스크립트 없음 (TTY 해석 실패 등)
-  terminal-notifier \
-    -message "$BODY" \
-    -title "Claude Code" \
-    -sender "$BUNDLE_ID" \
-    -activate "$BUNDLE_ID" &
-else
-  # fallback: 기존 osascript 알림
-  osascript -e "display notification \"$BODY\" with title \"Claude Code\"" &
 fi
 
 # 사운드 재생
