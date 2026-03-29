@@ -19,7 +19,9 @@ BODY="Response complete"
 if [[ -n "$TRANSCRIPT_PATH" && -f "$TRANSCRIPT_PATH" ]]; then
   LAST_MSG=$(grep '"type":"assistant"' "$TRANSCRIPT_PATH" | tail -1 | jq -r '.message.content[-1].text // empty' 2>/dev/null)
   if [[ -n "$LAST_MSG" ]]; then
-    BODY=$(echo "$LAST_MSG" | head -c 200)
+    # cut -c: 바이트가 아닌 문자 단위로 자름 (UTF-8 한국어 깨짐 방지)
+    # tr -d: AppleScript 문자열을 깨뜨리는 따옴표/백슬래시 제거
+    BODY=$(echo "$LAST_MSG" | tr -d '"\\' | cut -c1-200)
   fi
 fi
 
